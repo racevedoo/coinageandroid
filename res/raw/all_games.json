@@ -1,0 +1,16 @@
+{
+	"applist": {
+		"apps": {
+			"app": [
+				{
+					"appid": 5,
+					"name": "Dedicated Server"
+				},
+				{
+					"appid": 7,
+					"name": "Steam Client"
+				}
+			]
+		}
+	}
+}
