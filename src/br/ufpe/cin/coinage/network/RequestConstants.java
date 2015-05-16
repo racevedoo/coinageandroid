@@ -8,7 +8,7 @@ public class RequestConstants {
 	/* APIs */
 	public static final String URL_API_BUSCAPE = "http://sandbox.buscape.com/service";
 	public static final String URL_ALL_GAMES_STEAM = "http://api.steampowered.com/ISteamApps/GetAppList/v0001/";
-	
+	public static final String URL_APP_DETAILS_STEAM = "http://store.steampowered.com/api/appdetails";
 	/* Services */
 	public static final String FIND_PRODUCT_LIST_BUSCAPE = "/findProductList";
 	
@@ -29,7 +29,7 @@ public class RequestConstants {
 	/* Params */
 	public static final String KEYWORD_QUERY_PARAM_BUSCAPE = "keyword";
 	public static final String FORMAT_QUERY_PARAM_BUSCAPE = "format";
-	
+	public static final String APPIDS_QUERY_PARAM_STEAM = "appids";
 	
 	public static final String NO_CONNECTION_ERROR_OK_MOBILE = "There isn't connection.";
 	

@@ -45,6 +45,31 @@ public class CoinageService {
 			}
 		});
 	}
+	
+	public void getGamePrice(final int appId, 
+			final NetworkRequestCallback<Double> callback){
+		String url = Util.formatURL(URL_APP_DETAILS_STEAM, APPIDS_QUERY_PARAM_STEAM, appId);
+		MyRequest.Builder builder = new MyRequest.Builder();
+        builder.setTag(TAG)
+        	.setUrl(url)
+        	.setMethod(Request.Method.GET);
+        mNetworkQueue.doRequest(builder.build(), new NetworkRequestCallback<JSONObject>() {
+			
+			public void onRequestResponse(JSONObject response) {
+				try {
+					callback.onRequestResponse(Util.parseGamePrice(appId,response));
+				} catch (Exception e) {
+					onRequestError(e);
+				}
+			}
+			
+			public void onRequestError(Exception error) {
+				callback.onRequestError(error);
+				
+			}
+		});
+	}
+	
 	/* SESSION SERVICE */
 	/**
 	 * Calls the connect function from OKAPI
