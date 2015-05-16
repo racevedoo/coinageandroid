@@ -12,7 +12,7 @@ public abstract class GameTable implements BaseColumns{
 	public static final String COLUMN_BUSCAPELINK = "BUSCAPE_LINK";
 	public static final String COLUMN_ALERTA = "ALERTA";
 	
-	public static final String[] ALL_COLUMNS = { TABLE_NAME, COLUMN_NAME, COLUMN_STEAMPRICE, COLUMN_BUSCAPEPRICE, 
+	public static final String[] ALL_COLUMNS = { COLUMN_NAME, COLUMN_STEAMPRICE, COLUMN_BUSCAPEPRICE, 
 		COLUMN_STEAMLINK, COLUMN_BUSCAPELINK, COLUMN_ALERTA };
 	
 }
