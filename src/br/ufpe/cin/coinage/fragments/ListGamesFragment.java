@@ -13,31 +13,36 @@ import java.util.List;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import br.ufpe.cin.coinage.activities.GamesActivity;
-import br.ufpe.cin.coinage.android.R;
-import br.ufpe.cin.coinage.adapters.GamesListAdapter;
-import br.ufpe.cin.coinage.android.MainApplication;
-import br.ufpe.cin.coinage.network.CoinageService;
-import br.ufpe.cin.coinage.network.NetworkRequestCallback;
-import br.ufpe.cin.coinage.utils.Util;
-import br.ufpe.cin.model.SteamGame;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.SearchView;
-import android.widget.AdapterView.OnItemClickListener;
 import android.widget.SearchView.OnQueryTextListener;
+import br.ufpe.cin.coinage.activities.GamesActivity;
+import br.ufpe.cin.coinage.adapters.GamesListAdapter;
+import br.ufpe.cin.coinage.android.MainApplication;
+import br.ufpe.cin.coinage.android.R;
+import br.ufpe.cin.coinage.database.DBHelper;
+import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.network.CoinageService;
+import br.ufpe.cin.coinage.network.NetworkRequestCallback;
+import br.ufpe.cin.coinage.utils.Util;
 
 public class ListGamesFragment extends Fragment {
 

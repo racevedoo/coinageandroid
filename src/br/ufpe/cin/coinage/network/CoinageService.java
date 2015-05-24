@@ -1,8 +1,8 @@
 package br.ufpe.cin.coinage.network;
 
 import static br.ufpe.cin.coinage.network.RequestConstants.*;
+import br.ufpe.cin.coinage.model.SteamGame;
 import br.ufpe.cin.coinage.utils.Util;
-import br.ufpe.cin.model.SteamGame;
 
 import java.util.List;
 

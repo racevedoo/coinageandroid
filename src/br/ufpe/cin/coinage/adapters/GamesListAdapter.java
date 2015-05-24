@@ -12,7 +12,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.android.MainApplication;
-import br.ufpe.cin.model.SteamGame;
+import br.ufpe.cin.coinage.model.SteamGame;
 
 public class GamesListAdapter extends BaseAdapter{
 	Activity activity;

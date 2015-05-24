@@ -1,4 +1,4 @@
-package br.ufpe.cin.model;
+package br.ufpe.cin.coinage.model;
 
 public class SteamGame {
 	private int appId;

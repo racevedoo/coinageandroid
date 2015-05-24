@@ -23,7 +23,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
 import br.ufpe.cin.coinage.android.R;
-import br.ufpe.cin.model.SteamGame;
+import br.ufpe.cin.coinage.model.SteamGame;
 
 public class Util {
 	/**

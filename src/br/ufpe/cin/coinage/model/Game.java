@@ -1,4 +1,4 @@
-package br.ufpe.cin.model;
+package br.ufpe.cin.coinage.model;
 
 public class Game {
 	
@@ -54,5 +54,14 @@ public class Game {
 	}
 	public void setAlert(boolean alert) {
 		this.alert = alert;
+	}
+	
+	@Override
+	public String toString() {
+		String s = "";
+		
+		s = this.name + ", " +this.steamPrice + ", " +this.buscapePrice + ", " +this.steamLink + ", " +this.buscapeLink + ", " +this.alert;
+		
+		return s;		
 	}
 }
