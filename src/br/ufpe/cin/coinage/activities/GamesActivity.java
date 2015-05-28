@@ -1,17 +1,22 @@
 package br.ufpe.cin.coinage.activities;
 
-import br.ufpe.cin.coinage.android.R;
-import br.ufpe.cin.coinage.fragments.NavigationDrawerFragment;
-import br.ufpe.cin.coinage.utils.Constants;
-import br.ufpe.cin.coinage.utils.FragmentsCatalog;
-import android.app.Activity;
 import android.app.ActionBar;
+import android.app.Activity;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.os.Bundle;
+import android.support.v4.widget.DrawerLayout;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.support.v4.widget.DrawerLayout;
+import br.ufpe.cin.coinage.android.R;
+import br.ufpe.cin.coinage.database.DBHelper;
+import br.ufpe.cin.coinage.fragments.NavigationDrawerFragment;
+import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.model.Product;
+import br.ufpe.cin.coinage.model.Store;
+import br.ufpe.cin.coinage.utils.Constants;
+import br.ufpe.cin.coinage.utils.FragmentsCatalog;
 
 public class GamesActivity extends Activity implements
 		NavigationDrawerFragment.NavigationDrawerCallbacks {
@@ -43,6 +48,33 @@ public class GamesActivity extends Activity implements
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
 		
+		DBHelper db = new DBHelper(this);
+		db.clean();
+		
+		Game game = new Game("buceta");		
+		Product product = new Product(Store.STEAM, 10.75, "huehebrbr");
+		game.addProduct(product);
+		
+		Product product2 = new Product(Store.STEAM, 27, "hueasfagrbr");
+		game.addProduct(product2);
+		
+		Product product3 = new Product(Store.BUSCAPE, 0, "huehebrbr");
+		game.addProduct(product3);
+		
+		Product product4 = new Product(Store.BUSCAPE, 1.0789, "huehebrbr");
+		game.addProduct(product4);
+		
+		Product product5 = new Product(Store.STEAM, 210391.0294, "huehebrbr");
+		game.addProduct(product5);		
+		
+		
+		Game game2 = new Game("buceta");		
+		db.insertGame(game2);
+		
+		db.insertGame(game);
+		Game g = db.getGame("buceta");		
+
+		Log.i("[Game]", g.toString());
 	}
 
 	

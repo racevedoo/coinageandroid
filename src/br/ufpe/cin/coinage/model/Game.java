@@ -1,67 +1,83 @@
 package br.ufpe.cin.coinage.model;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class Game {
 	
 	private String name;
-	private double steamPrice;
-	private double buscapePrice;
-	private String steamLink;
-	private String buscapeLink;
+	private List<Product> products;
 	private boolean alert;
 	
-	public Game(String name, double steamPrice, double buscapePrice, String steamLink, String buscapeLink, boolean alert) {
+	public Game(String name) {
 		this.name = name;
-		this.steamPrice = steamPrice;
-		this.buscapePrice = buscapePrice;
-		this.steamLink = steamLink;
-		this.buscapeLink = buscapeLink;
-		this.alert = alert;
+		this.alert = false;
+		this.products = new ArrayList<Product>();
 	}
 	
-	public double getSteamPrice() {
-		return steamPrice;
-	}
-	public void setSteamPrice(double steamPrice) {
-		this.steamPrice = steamPrice;
-	}
-	public double getBuscapePrice() {
-		return buscapePrice;
-	}
-	public void setBuscapePrice(double buscapePrice) {
-		this.buscapePrice = buscapePrice;
-	}
-	public String getSteamLink() {
-		return steamLink;
-	}
-	public void setSteamLink(String steamLink) {
-		this.steamLink = steamLink;
-	}
-	public String getBuscapeLink() {
-		return buscapeLink;
-	}
-	public void setBuscapeLink(String buscapeLink) {
-		this.buscapeLink = buscapeLink;
+	public Game(String name, boolean alert) {
+		this.name = name;
+		this.alert = alert;
+		this.products = new ArrayList<Product>();
 	}	
+	
+	public Game(String name, List<Product> products, boolean alert) {
+		this.name = name;
+		this.products = products;
+		this.alert = alert;
+	}
 	
 	public String getName() {
 		return name;
 	}
+	
 	public void setName(String name) {
 		this.name = name;
 	}
+	
 	public boolean isAlert() {
 		return alert;
 	}
+	
 	public void setAlert(boolean alert) {
 		this.alert = alert;
 	}
 	
+	public List<Product> getProducts() {
+		return this.products;
+	}
+	
+	public void addProduct(Product product) {
+		this.products.add(product);
+	}
+	
+	public void addProducts(List<Product> products) {
+		this.products.addAll(products);
+	}
+	
+	public void removeProduct(Store store) {
+		for (Product p : this.products) 
+			if (p.getStore().equals(store))
+				this.products.remove(p);
+	}
+	
+	public void removeAllProducts() {
+		this.products = new ArrayList<Product>();
+	}
+	
 	@Override
-	public String toString() {
+	public String toString() {		
 		String s = "";
 		
-		s = this.name + ", " +this.steamPrice + ", " +this.buscapePrice + ", " +this.steamLink + ", " +this.buscapeLink + ", " +this.alert;
+		s = s + "Nome: " +this.name+"\n";
 		
-		return s;		
+		for (Product p : this.products)
+			s = s + "Loja: " + p.getStore() + ", Preço: " +p.getPrice()+ ", Link: " +p.getLink() +"\n";
+		
+		s = s + "Alerta: " +this.alert + "\n";		
+		
+		return s;
 	}
+	
+	
 }
