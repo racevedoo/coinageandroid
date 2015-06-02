@@ -100,7 +100,6 @@ public class MyGamesFragment extends Fragment {
 	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
 		if (!((GamesActivity) getActivity()).isDrawerOpen()) {
 			inflater.inflate(R.menu.search_menu, menu);
-			Util.showLongToast(getActivity(), "createoptions");
 			SearchManager searchManager = 
 					(SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
 			SearchView searchView = 

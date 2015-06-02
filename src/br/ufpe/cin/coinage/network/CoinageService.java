@@ -1,14 +1,18 @@
 package br.ufpe.cin.coinage.network;
 
-import static br.ufpe.cin.coinage.network.RequestConstants.*;
+import static br.ufpe.cin.coinage.network.RequestConstants.CALLABLE_URL_API_BUSCAPE;
+import static br.ufpe.cin.coinage.network.RequestConstants.CALLABLE_URL_APP_DETAILS_STEAM;
+import static br.ufpe.cin.coinage.network.RequestConstants.URL_ALL_GAMES_STEAM;
 import static org.apache.commons.httpclient.util.URIUtil.encodeQuery;
-import br.ufpe.cin.coinage.model.SteamGame;
-import br.ufpe.cin.coinage.utils.Util;
 
 import java.util.List;
 
 import org.apache.commons.httpclient.URIException;
 import org.json.JSONObject;
+
+import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.utils.Util;
 
 import com.android.volley.Request;
 
@@ -31,7 +35,8 @@ public class CoinageService {
 		return mInstance;
 	}
 	
-	public void getBuscapeGameByKeyword(String keyword){
+	public void getBuscapeGameByKeyword(final NetworkRequestCallback<List<Game>> callback,
+			String keyword){
 		keyword = keyword.replaceAll(" ","-");
 		try {
 			keyword = encodeQuery(keyword);
