@@ -158,13 +158,5 @@ public class Util {
 		int price100 = data.getJSONObject("price_overview").getInt("final");
 		return price100 / 100;
 	}
-	
-	public static String formatURL(String baseUrl, Object... queryParams){
-		String ret = baseUrl + "?";
-		for(int i = 0;i<queryParams.length;i+=2){
-			ret += queryParams[i].toString() + "=" + queryParams[i+1].toString() + "&";
-		}
-		return ret.substring(0, ret.length()-1);
-	}
 }
 

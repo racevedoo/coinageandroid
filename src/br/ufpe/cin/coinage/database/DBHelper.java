@@ -77,14 +77,16 @@ public class DBHelper extends SQLiteOpenHelper{
 		return game;
 	}
 	
-	public List<Product> getProducts(String name) {
+	public List<Product> getProducts(String... name) {
 		this.db = this.getReadableDatabase();
 		String sql = "Select P.Store, P.Price, P.Link"
 				+ " FROM Product P, Game G, Game_Product GP"
 				+ " where G." +GameTable.COLUMN_ID+ " = GP." + GameProductTable.COLUMN_GAME
-				+ " and GP." +GameProductTable.COLUMN_PRODUCT+ " = P." + ProductTable.COLUMN_ID
-				+ " and G." +GameTable.COLUMN_NAME + " = " + "'" + name + "' COLLATE NOCASE";		
+				+ " and GP." +GameProductTable.COLUMN_PRODUCT+ " = P." + ProductTable.COLUMN_ID;
 		
+		if(name.length > 0){
+			sql += " and G." +GameTable.COLUMN_NAME + " = " + "'" + name[0] + "' COLLATE NOCASE";		
+		}
 		Cursor c = this.db.rawQuery(sql, null);
 		
 		List<Product> products = new ArrayList<Product>();
@@ -107,6 +109,8 @@ public class DBHelper extends SQLiteOpenHelper{
 			c.close();
 		}		
 	}
+	
+	
 	
 	
 	private Game getGameTable(String name) {
@@ -135,18 +139,42 @@ public class DBHelper extends SQLiteOpenHelper{
 		List<Game> games = new ArrayList<Game>();
 		
 		Cursor c = this.db.query(true, GameTable.TABLE_NAME, GameTable.ALL_COLUMNS, null, null, null, null, null, null);
-		if (c != null)
-			c.moveToFirst();	
-		
-		while(!c.isAfterLast()) {			
-			games.add(new Game(c.getString(c.getColumnIndexOrThrow(GameTable.COLUMN_NAME)),
-					c.getInt(c.getColumnIndexOrThrow(GameTable.COLUMN_ALERTA)) == 1));			
-			
+		if (c != null) c.moveToFirst();
+		String name = "";
+		boolean alert = false;
+		Game toAdd = null;
+		while(!c.isAfterLast()) {
+			name = c.getString(c.getColumnIndexOrThrow(GameTable.COLUMN_NAME));
+			alert = c.getInt(c.getColumnIndexOrThrow(GameTable.COLUMN_ALERTA)) == 1;
+			toAdd = new Game(name, getProducts(name), alert);
+			games.add(toAdd);
 			c.moveToNext();
 		}
 		
 		c.close();
 		return games;		
+	}
+	
+	public List<Game> getGamesAlert(){
+		this.db = this.getReadableDatabase();
+		
+		List<Game> games = new ArrayList<Game>();
+		
+		Cursor c = this.db.query(true, GameTable.TABLE_NAME, GameTable.ALL_COLUMNS, GameTable.COLUMN_ALERTA + " = 1", null, null, null, null, null);
+		if (c != null) c.moveToFirst();
+		String name = "";
+		boolean alert = false;
+		Game toAdd = null;
+		while(!c.isAfterLast()) {
+			name = c.getString(c.getColumnIndexOrThrow(GameTable.COLUMN_NAME));
+			alert = c.getInt(c.getColumnIndexOrThrow(GameTable.COLUMN_ALERTA)) == 1;
+			toAdd = new Game(name, getProducts(name), alert);
+			games.add(toAdd);
+			c.moveToNext();
+		}
+		
+		c.close();
+		return games;
 	}
 	
 	public void updateGame(Game game) {

@@ -47,34 +47,6 @@ public class GamesActivity extends Activity implements
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
 				(DrawerLayout) findViewById(R.id.drawer_layout));
-		
-		DBHelper db = new DBHelper(this);
-		db.clean();
-		
-		Game game = new Game("buceta");		
-		Product product = new Product(Store.STEAM, 10.75, "huehebrbr");
-		game.addProduct(product);
-		
-		Product product2 = new Product(Store.STEAM, 27, "hueasfagrbr");
-		game.addProduct(product2);
-		
-		Product product3 = new Product(Store.BUSCAPE, 0, "huehebrbr");
-		game.addProduct(product3);
-		
-		Product product4 = new Product(Store.BUSCAPE, 1.0789, "huehebrbr");
-		game.addProduct(product4);
-		
-		Product product5 = new Product(Store.STEAM, 210391.0294, "huehebrbr");
-		game.addProduct(product5);		
-		
-		
-		Game game2 = new Game("buceta");		
-		db.insertGame(game2);
-		
-		db.insertGame(game);
-		Game g = db.getGame("buceta");		
-
-		Log.i("[Game]", g.toString());
 	}
 
 	

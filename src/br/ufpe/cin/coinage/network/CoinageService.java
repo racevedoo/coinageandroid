@@ -1,11 +1,13 @@
 package br.ufpe.cin.coinage.network;
 
 import static br.ufpe.cin.coinage.network.RequestConstants.*;
+import static org.apache.commons.httpclient.util.URIUtil.encodeQuery;
 import br.ufpe.cin.coinage.model.SteamGame;
 import br.ufpe.cin.coinage.utils.Util;
 
 import java.util.List;
 
+import org.apache.commons.httpclient.URIException;
 import org.json.JSONObject;
 
 import com.android.volley.Request;
@@ -17,11 +19,33 @@ public class CoinageService {
 	
 	private NetworkQueue mNetworkQueue;
 
-	
-	public CoinageService() {
+	private static CoinageService mInstance = null;
+	private CoinageService() {
 		mNetworkQueue = NetworkQueue.getInstance();
 	}
 	
+	public static CoinageService getInstance(){
+		if(mInstance == null){
+			mInstance = new CoinageService();
+		}
+		return mInstance;
+	}
+	
+	public void getBuscapeGameByKeyword(String keyword){
+		keyword = keyword.replaceAll(" ","-");
+		try {
+			keyword = encodeQuery(keyword);
+		} catch (URIException e) {
+			//nothing
+		}
+		String url = String.format(CALLABLE_URL_API_BUSCAPE, keyword);
+		MyRequest.Builder builder = new MyRequest.Builder();
+        builder.setTag(TAG)
+        	.setUrl(url)
+        	.setMethod(Request.Method.GET);
+        //TODO: add callback
+        
+	}
 	
 	public void getAllSteamGames(final NetworkRequestCallback<List<SteamGame>> callback){
 		String url = URL_ALL_GAMES_STEAM;
@@ -48,7 +72,7 @@ public class CoinageService {
 	
 	public void getGamePrice(final int appId, 
 			final NetworkRequestCallback<Double> callback){
-		String url = Util.formatURL(URL_APP_DETAILS_STEAM, APPIDS_QUERY_PARAM_STEAM, appId);
+		String url = String.format(CALLABLE_URL_APP_DETAILS_STEAM, appId);
 		MyRequest.Builder builder = new MyRequest.Builder();
         builder.setTag(TAG)
         	.setUrl(url)
