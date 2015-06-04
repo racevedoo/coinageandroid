@@ -22,7 +22,9 @@ import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.widget.Toast;
+import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
+import br.ufpe.cin.coinage.model.GameDTO;
 import br.ufpe.cin.coinage.model.SteamGame;
 
 public class Util {
@@ -153,10 +155,31 @@ public class Util {
 		return games;
 	}
 	
-	public static double parseGamePrice(int appid, JSONObject response) throws JSONException{
+	public static GameDTO parseSteamGame(int appid, JSONObject response) throws JSONException{
 		JSONObject data = response.getJSONObject(appid+"").getJSONObject("data");
 		int price100 = data.getJSONObject("price_overview").getInt("final");
-		return price100 / 100;
+		return new GameDTO(price100 / 100, "http://store.steampowered.com/app/" + appid + "/");
+	}
+	
+	public static GameDTO parseBuscapeGame(JSONObject response) throws Exception{
+		JSONObject product = (JSONObject) response.getJSONArray("product").get(0);
+		product = product.getJSONObject("product");
+		double price = product.getDouble("pricemin");
+		String link = ((JSONObject)product.getJSONArray("links").get(0)).getString("url");
+		if(!link.startsWith("http://www.buscape.com.br")){
+			throw new Exception();
+		}
+		return new GameDTO(price, link);
+	}
+	
+	public static List<SteamGame> getSteamGamesByKeyword(String keyword){
+		List<SteamGame> ret = new ArrayList<SteamGame>();
+		for(SteamGame game : MainApplication.allSteamGames){
+			if(game.getName().toUpperCase().startsWith(keyword.toUpperCase())){
+				ret.add(game);
+			}
+		}
+		return ret;
 	}
 }
 

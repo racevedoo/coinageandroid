@@ -2,16 +2,12 @@ package br.ufpe.cin.coinage.network;
 
 import static br.ufpe.cin.coinage.network.RequestConstants.CALLABLE_URL_API_BUSCAPE;
 import static br.ufpe.cin.coinage.network.RequestConstants.CALLABLE_URL_APP_DETAILS_STEAM;
-import static br.ufpe.cin.coinage.network.RequestConstants.URL_ALL_GAMES_STEAM;
 import static org.apache.commons.httpclient.util.URIUtil.encodeQuery;
-
-import java.util.List;
 
 import org.apache.commons.httpclient.URIException;
 import org.json.JSONObject;
 
-import br.ufpe.cin.coinage.model.Game;
-import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.model.GameDTO;
 import br.ufpe.cin.coinage.utils.Util;
 
 import com.android.volley.Request;
@@ -35,7 +31,7 @@ public class CoinageService {
 		return mInstance;
 	}
 	
-	public void getBuscapeGameByKeyword(final NetworkRequestCallback<List<Game>> callback,
+	public void getBuscapeGameByKeyword(final NetworkRequestCallback<GameDTO> callback,
 			String keyword){
 		keyword = keyword.replaceAll(" ","-");
 		try {
@@ -48,11 +44,25 @@ public class CoinageService {
         builder.setTag(TAG)
         	.setUrl(url)
         	.setMethod(Request.Method.GET);
-        //TODO: add callback
+        mNetworkQueue.doRequest(builder.build(), new NetworkRequestCallback<JSONObject>() {
+			
+			public void onRequestResponse(JSONObject response) {
+				try {
+					callback.onRequestResponse(Util.parseBuscapeGame(response));
+				} catch (Exception e) {
+					onRequestError(e);
+				}
+			}
+			
+			public void onRequestError(Exception error) {
+				callback.onRequestError(error);
+				
+			}
+		});
         
 	}
 	
-	public void getAllSteamGames(final NetworkRequestCallback<List<SteamGame>> callback){
+	/*public void getAllSteamGames(final NetworkRequestCallback<List<SteamGame>> callback){
 		String url = URL_ALL_GAMES_STEAM;
 		MyRequest.Builder builder = new MyRequest.Builder();
         builder.setTag(TAG)
@@ -73,10 +83,10 @@ public class CoinageService {
 				
 			}
 		});
-	}
+	}*/
 	
 	public void getGamePrice(final int appId, 
-			final NetworkRequestCallback<Double> callback){
+			final NetworkRequestCallback<GameDTO> callback){
 		String url = String.format(CALLABLE_URL_APP_DETAILS_STEAM, appId);
 		MyRequest.Builder builder = new MyRequest.Builder();
         builder.setTag(TAG)
@@ -86,7 +96,7 @@ public class CoinageService {
 			
 			public void onRequestResponse(JSONObject response) {
 				try {
-					callback.onRequestResponse(Util.parseGamePrice(appId,response));
+					callback.onRequestResponse(Util.parseSteamGame(appId,response));
 				} catch (Exception e) {
 					onRequestError(e);
 				}

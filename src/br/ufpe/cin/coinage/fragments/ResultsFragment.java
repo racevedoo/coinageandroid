@@ -1,11 +1,7 @@
 package br.ufpe.cin.coinage.fragments;
 
 
-import static br.ufpe.cin.coinage.utils.Util.hideProgress;
-import static br.ufpe.cin.coinage.utils.Util.showLongToast;
-import static br.ufpe.cin.coinage.utils.Util.showProgress;
-import static br.ufpe.cin.coinage.utils.Constants.*;
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
+import static br.ufpe.cin.coinage.utils.Constants.KEYWORD_FRAGMENT_KEY;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,29 +24,29 @@ import android.widget.ListView;
 import android.widget.SearchView;
 import android.widget.SearchView.OnQueryTextListener;
 import br.ufpe.cin.coinage.activities.GamesActivity;
-import br.ufpe.cin.coinage.adapters.GamesListAdapter;
+import br.ufpe.cin.coinage.adapters.ResultsAdapter;
 import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
 import br.ufpe.cin.coinage.model.SteamGame;
 import br.ufpe.cin.coinage.network.CoinageService;
-import br.ufpe.cin.coinage.network.NetworkRequestCallback;
 import br.ufpe.cin.coinage.utils.Util;
 
-public class MyGamesFragment extends Fragment {
+public class ResultsFragment extends Fragment {
 
 	private static final String TAG = "ListGamesFragment";
 	
 	private CoinageService service;
 	private ListView gamesListView;
 	private ProgressDialog loadingGames;
-	private List<Game> games;
+	private List<SteamGame> games;
+	private String keyword;
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
-	public static MyGamesFragment newInstance() {
-		return new MyGamesFragment();
+	public static ResultsFragment newInstance() {
+		return new ResultsFragment();
 	}
 
 	@Override
@@ -64,10 +60,10 @@ public class MyGamesFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 		service = CoinageService.getInstance();
 		gamesListView = (ListView) rootView.findViewById(R.id.steam_games_lstv);
-		games = new ArrayList<Game>();
+		games = new ArrayList<SteamGame>();
+		keyword = getArguments().getString(KEYWORD_FRAGMENT_KEY);
 		setupListView();
-		doMyGames();
-		setHasOptionsMenu(true);
+		getSteamGames();
 		return rootView;
 	}
 	
@@ -82,55 +78,21 @@ public class MyGamesFragment extends Fragment {
 				//nada
 			}
 		});
-		gamesListView.setAdapter(new GamesListAdapter(getActivity(), games));
+		gamesListView.setAdapter(new ResultsAdapter(getActivity(), games));
 	}
 	
-	private void doMyGames(){
-		updateList(getDbHelper().getGamesAlert());
+	private void getSteamGames(){
+		loadingGames = Util.showProgress(getActivity(), R.string.loading_steam_games);
+		updateList(Util.getSteamGamesByKeyword(keyword));
+		Util.hideProgress(loadingGames);
 	}
 	
-	private void updateList(List<Game> response){
+	private void updateList(List<SteamGame> response){
 		games.clear();
-		for(Game game : response){
+		for(SteamGame game : response){
 			games.add(game);
 		}
 		gamesListView.invalidateViews();
-	}
-	@Override
-	public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-		if (!((GamesActivity) getActivity()).isDrawerOpen()) {
-			inflater.inflate(R.menu.search_menu, menu);
-			SearchManager searchManager = 
-					(SearchManager) getActivity().getSystemService(Context.SEARCH_SERVICE);
-			SearchView searchView = 
-					(SearchView) menu.findItem(R.id.action_search).getActionView();
-			searchView.setSearchableInfo(
-					searchManager.getSearchableInfo(getActivity().getComponentName()));
-			searchView.setOnQueryTextListener(new OnQueryTextListener() {
-				@Override
-				public boolean onQueryTextSubmit(final String query) {
-					navigateToViewFragment(query);
-					return true;
-				}
-				
-				@Override
-				public boolean onQueryTextChange(String newText) {
-					/*Util.showLongToast(getActivity(), newText);
-					GamesListAdapter adapter = (GamesListAdapter) gamesListView.getAdapter();
-					if(!newText.isEmpty()){
-						for(int i = 0;i<adapter.getListItems().size();++i){
-							if(!containsIgnoreCase(adapter.getListItems().get(i).getName(), newText)){
-								adapter.hide(i);
-							}
-						}
-					}
-					adapter.notifyDataSetChanged();
-					previousSearchText = newText;*/
-					return true;
-				}
-			});
-		}
-		super.onCreateOptionsMenu(menu, inflater);
 	}
 	
 	@Override
@@ -138,8 +100,8 @@ public class MyGamesFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void navigateToViewFragment(String keyword) {
-		final Fragment fragment = ResultsFragment.newInstance();
+	/*private void navigateToViewFragment(String keyword) {
+		final Fragment fragment = ViewFragment.newInstance();
 		
 		final Bundle args = new Bundle();
 		args.putString(KEYWORD_FRAGMENT_KEY, keyword);
@@ -151,6 +113,6 @@ public class MyGamesFragment extends Fragment {
 			.replace(R.id.container, fragment)
 			.addToBackStack(null)
 			.commit();
-	}
+	}*/
 	
 }

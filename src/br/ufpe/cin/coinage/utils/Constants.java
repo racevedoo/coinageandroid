@@ -16,5 +16,5 @@ public class Constants {
 	public static String APPS_STEAM_JSON_KEY = "apps";
 	public static String APP_STEAM_JSON_KEY = "app";
 	
-	
+	public static String KEYWORD_FRAGMENT_KEY = "KEYWORD";
 }
