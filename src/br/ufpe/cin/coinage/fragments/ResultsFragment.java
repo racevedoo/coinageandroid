@@ -9,28 +9,23 @@ import java.util.List;
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
-import android.app.SearchManager;
-import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.SearchView;
-import android.widget.SearchView.OnQueryTextListener;
-import br.ufpe.cin.coinage.activities.GamesActivity;
 import br.ufpe.cin.coinage.adapters.ResultsAdapter;
 import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
-import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.model.GameDTO;
 import br.ufpe.cin.coinage.model.SteamGame;
 import br.ufpe.cin.coinage.network.CoinageService;
+import br.ufpe.cin.coinage.network.NetworkRequestCallback;
 import br.ufpe.cin.coinage.utils.Util;
 
 public class ResultsFragment extends Fragment {
@@ -40,8 +35,10 @@ public class ResultsFragment extends Fragment {
 	private CoinageService service;
 	private ListView gamesListView;
 	private ProgressDialog loadingGames;
+	private ProgressDialog loadingPrices;
 	private List<SteamGame> games;
 	private String keyword;
+	private boolean steamFinished = false, buscapeFinished = false;
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
@@ -75,7 +72,44 @@ public class ResultsFragment extends Fragment {
 		gamesListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				//nada
+				SteamGame gameClicked = (SteamGame) parent.getItemAtPosition(position);
+				int appid = gameClicked.getAppId();
+				String name = gameClicked.getName();
+				
+				loadingPrices = Util.showProgress(getActivity(), R.string.loading_prices);
+				service.getGamePrice(appid, new NetworkRequestCallback<GameDTO>() {
+					
+					@Override
+					public void onRequestResponse(GameDTO response) {
+						steamFinished = true;
+						if(buscapeFinished)Util.hideProgress(loadingPrices);
+						Util.showLongToast(getActivity(), "Preco: " + response.getPrice() + " Nome: " + response.getLink());
+					}
+					
+					@Override
+					public void onRequestError(Exception error) {
+						steamFinished = true;
+						if(buscapeFinished)Util.hideProgress(loadingPrices);
+						Util.showLongToast(getActivity(), "Error retrieving game price");
+					}
+				});
+				
+				service.getBuscapeGameByKeyword(name, new NetworkRequestCallback<GameDTO>() {
+					
+					@Override
+					public void onRequestResponse(GameDTO response) {
+						buscapeFinished = true;
+						if(steamFinished)Util.hideProgress(loadingPrices);
+						Util.showLongToast(getActivity(), "Preco buscape: " + response.getPrice() + " Nome: " + response.getLink());
+					}
+					
+					@Override
+					public void onRequestError(Exception error) {
+						buscapeFinished = true;
+						if(steamFinished)Util.hideProgress(loadingPrices);
+						Util.showLongToast(getActivity(), "Error retrieving game price");
+					}
+				});
 			}
 		});
 		gamesListView.setAdapter(new ResultsAdapter(getActivity(), games));

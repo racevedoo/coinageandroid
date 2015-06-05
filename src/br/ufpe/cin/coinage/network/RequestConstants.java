@@ -7,7 +7,7 @@ public class RequestConstants {
 	
 	/* APIs */
 	private static final String URL_API_BUSCAPE = "http://sandbox.buscape.com/service/findProductList/" + APP_TOKEN_BUSCAPE + "/?";
-	private static final String URL_APP_DETAILS_STEAM = "http://store.steampowered.com/api/appdetails/?";
+	private static final String URL_APP_DETAILS_STEAM = "http://store.steampowered.com/api/appdetails?";
 	/* Services */
 	
 	/*Constant values*/
@@ -36,7 +36,7 @@ public class RequestConstants {
 													+ SPEC_ID_QUERY_PARAM_BUSCAPE + "=" + PC_PLATFORM_CATEGORY_BUSCAPE + "&"
 													+ RESULTS_QUERY_PARAM_BUSCAPE + "=" + MAX_RESULTS_BUSCAPE + "&"
 													+ KEYWORD_QUERY_PARAM_BUSCAPE + "=%s";
-	public static final String CALLABLE_URL_APP_DETAILS_STEAM = URL_APP_DETAILS_STEAM + APPIDS_QUERY_PARAM_STEAM + "%s";
+	public static final String CALLABLE_URL_APP_DETAILS_STEAM = URL_APP_DETAILS_STEAM + APPIDS_QUERY_PARAM_STEAM + "=%s";
 
 	
 }

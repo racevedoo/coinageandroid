@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="loading_default_title">Loading...</string>
     <string name="loading_steam_games">Loading games...</string>
+    <string name="loading_prices">Loading game prices...</string>
     <string name="title_activity_games">GamesActivity</string>
     <string name="title_section_search">Games</string>
     <string name="title_section2">Section 2</string>

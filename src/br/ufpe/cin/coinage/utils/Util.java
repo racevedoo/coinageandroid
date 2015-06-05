@@ -158,14 +158,19 @@ public class Util {
 	public static GameDTO parseSteamGame(int appid, JSONObject response) throws JSONException{
 		JSONObject data = response.getJSONObject(appid+"").getJSONObject("data");
 		int price100 = data.getJSONObject("price_overview").getInt("final");
-		return new GameDTO(price100 / 100, "http://store.steampowered.com/app/" + appid + "/");
+		return new GameDTO(((double)price100 / 100.0), "http://store.steampowered.com/app/" + appid + "/");
 	}
 	
 	public static GameDTO parseBuscapeGame(JSONObject response) throws Exception{
 		JSONObject product = (JSONObject) response.getJSONArray("product").get(0);
 		product = product.getJSONObject("product");
 		double price = product.getDouble("pricemin");
-		String link = ((JSONObject)product.getJSONArray("links").get(0)).getString("url");
+		String link = "";
+		try{
+			link = ((JSONObject)product.getJSONArray("links").get(0)).getString("url");
+		}catch(JSONException e){
+			//nao tem url
+		}
 		if(!link.startsWith("http://www.buscape.com.br")){
 			throw new Exception();
 		}
