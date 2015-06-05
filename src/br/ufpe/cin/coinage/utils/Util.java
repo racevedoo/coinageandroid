@@ -12,7 +12,9 @@ import java.io.Reader;
 import java.io.StringWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,8 +26,9 @@ import android.content.Context;
 import android.widget.Toast;
 import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
-import br.ufpe.cin.coinage.model.GameDTO;
-import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.model.Product;
+import br.ufpe.cin.coinage.model.Store;
 
 public class Util {
 	/**
@@ -146,39 +149,46 @@ public class Util {
 		return writer.toString();
 	}
 	
-	public static List<SteamGame> parseSteamGames(JSONObject response) throws JSONException{
+	
+	public static Map<String, Integer> getSteamIdMap(JSONObject response) throws JSONException{
 		JSONArray appList = response.getJSONObject(APPLIST_STEAM_JSON_KEY).getJSONObject(APPS_STEAM_JSON_KEY).getJSONArray(APP_STEAM_JSON_KEY);
-		List<SteamGame> games = new ArrayList<SteamGame>();
+		Map<String, Integer> map = new Hashtable<String, Integer>();
+		
 		for(int i = 0; i < appList.length();++i){
-			games.add(new SteamGame(appList.getJSONObject(i).getInt("appid"), appList.getJSONObject(i).getString("name")));
+			map.put(appList.getJSONObject(i).getString("name"), appList.getJSONObject(i).getInt("appid"));
 		}
-		return games;
+		
+		return map;
 	}
 	
-	public static GameDTO parseSteamGame(int appid, JSONObject response) throws JSONException{
+	public static Product parseSteamGame(int appid, JSONObject response) throws JSONException{
 		JSONObject data = response.getJSONObject(appid+"").getJSONObject("data");
 		int price100 = data.getJSONObject("price_overview").getInt("final");
-		return new GameDTO(price100 / 100, "http://store.steampowered.com/app/" + appid + "/");
+		return new Product(Store.STEAM, price100 / 100, "http://store.steampowered.com/app/" + appid + "/");
 	}
 	
-	public static GameDTO parseBuscapeGame(JSONObject response) throws Exception{
+	public static Product parseBuscapeGame(JSONObject response) throws Exception{
 		JSONObject product = (JSONObject) response.getJSONArray("product").get(0);
 		product = product.getJSONObject("product");
 		double price = product.getDouble("pricemin");
 		String link = ((JSONObject)product.getJSONArray("links").get(0)).getString("url");
-		if(!link.startsWith("http://www.buscape.com.br")){
+		
+		if (!link.startsWith("http://www.buscape.com.br")){
 			throw new Exception();
 		}
-		return new GameDTO(price, link);
+		
+		return new Product(Store.BUSCAPE, price, link);
 	}
 	
-	public static List<SteamGame> getSteamGamesByKeyword(String keyword){
-		List<SteamGame> ret = new ArrayList<SteamGame>();
-		for(SteamGame game : MainApplication.allSteamGames){
-			if(game.getName().toUpperCase().startsWith(keyword.toUpperCase())){
-				ret.add(game);
+	public static Map<String, Integer> getSteamGamesByKeyword(String keyword){
+		Map<String, Integer> ret = new Hashtable<String, Integer>();
+		
+		for (String key : MainApplication.allSteamGames.keySet()) {
+			if (key.toUpperCase().startsWith(keyword.toUpperCase())) {
+				ret.put(key, MainApplication.allSteamGames.get(key));
 			}
-		}
+		}			
+		
 		return ret;
 	}
 }

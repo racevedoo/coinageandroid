@@ -33,7 +33,7 @@ import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
-import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.model.SteamIdMapper;
 import br.ufpe.cin.coinage.network.CoinageService;
 import br.ufpe.cin.coinage.network.NetworkRequestCallback;
 import br.ufpe.cin.coinage.utils.Util;

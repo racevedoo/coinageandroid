@@ -29,7 +29,7 @@ import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
-import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.model.SteamIdMapper;
 import br.ufpe.cin.coinage.network.CoinageService;
 import br.ufpe.cin.coinage.utils.Util;
 
@@ -40,7 +40,7 @@ public class ResultsFragment extends Fragment {
 	private CoinageService service;
 	private ListView gamesListView;
 	private ProgressDialog loadingGames;
-	private List<SteamGame> games;
+	private List<SteamIdMapper> games;
 	private String keyword;
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -60,7 +60,7 @@ public class ResultsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 		service = CoinageService.getInstance();
 		gamesListView = (ListView) rootView.findViewById(R.id.steam_games_lstv);
-		games = new ArrayList<SteamGame>();
+		games = new ArrayList<SteamIdMapper>();
 		keyword = getArguments().getString(KEYWORD_FRAGMENT_KEY);
 		setupListView();
 		getSteamGames();
@@ -87,9 +87,9 @@ public class ResultsFragment extends Fragment {
 		Util.hideProgress(loadingGames);
 	}
 	
-	private void updateList(List<SteamGame> response){
+	private void updateList(List<SteamIdMapper> response){
 		games.clear();
-		for(SteamGame game : response){
+		for(SteamIdMapper game : response){
 			games.add(game);
 		}
 		gamesListView.invalidateViews();

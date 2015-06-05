@@ -7,7 +7,7 @@ import static org.apache.commons.httpclient.util.URIUtil.encodeQuery;
 import org.apache.commons.httpclient.URIException;
 import org.json.JSONObject;
 
-import br.ufpe.cin.coinage.model.GameDTO;
+import br.ufpe.cin.coinage.model.Product;
 import br.ufpe.cin.coinage.utils.Util;
 
 import com.android.volley.Request;
@@ -31,8 +31,7 @@ public class CoinageService {
 		return mInstance;
 	}
 	
-	public void getBuscapeGameByKeyword(final NetworkRequestCallback<GameDTO> callback,
-			String keyword){
+	public void getBuscapeGameByKeyword(String keyword, final NetworkRequestCallback<Product> callback) {
 		keyword = keyword.replaceAll(" ","-");
 		try {
 			keyword = encodeQuery(keyword);
@@ -85,8 +84,8 @@ public class CoinageService {
 		});
 	}*/
 	
-	public void getGamePrice(final int appId, 
-			final NetworkRequestCallback<GameDTO> callback){
+	public void getSteamGamePrice(final int appId, 
+			final NetworkRequestCallback<Product> callback){
 		String url = String.format(CALLABLE_URL_APP_DETAILS_STEAM, appId);
 		MyRequest.Builder builder = new MyRequest.Builder();
         builder.setTag(TAG)
