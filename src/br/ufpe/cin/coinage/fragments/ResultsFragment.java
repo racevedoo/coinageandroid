@@ -4,13 +4,15 @@ package br.ufpe.cin.coinage.fragments;
 import static br.ufpe.cin.coinage.utils.Constants.KEYWORD_FRAGMENT_KEY;
 
 import java.util.ArrayList;
+import java.util.Hashtable;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -22,8 +24,8 @@ import br.ufpe.cin.coinage.adapters.ResultsAdapter;
 import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
-import br.ufpe.cin.coinage.model.GameDTO;
-import br.ufpe.cin.coinage.model.SteamGame;
+import br.ufpe.cin.coinage.model.Product;
+import br.ufpe.cin.coinage.model.ui.ResultAdapterItem;
 import br.ufpe.cin.coinage.network.CoinageService;
 import br.ufpe.cin.coinage.network.NetworkRequestCallback;
 import br.ufpe.cin.coinage.utils.Util;
@@ -36,7 +38,7 @@ public class ResultsFragment extends Fragment {
 	private ListView gamesListView;
 	private ProgressDialog loadingGames;
 	private ProgressDialog loadingPrices;
-	private List<SteamGame> games;
+	private List<ResultAdapterItem> games;
 	private String keyword;
 	private boolean steamFinished = false, buscapeFinished = false;
 	/**
@@ -57,7 +59,7 @@ public class ResultsFragment extends Fragment {
 		View rootView = inflater.inflate(R.layout.fragment_search, container, false);
 		service = CoinageService.getInstance();
 		gamesListView = (ListView) rootView.findViewById(R.id.steam_games_lstv);
-		games = new ArrayList<SteamGame>();
+		games = new ArrayList<ResultAdapterItem>();
 		keyword = getArguments().getString(KEYWORD_FRAGMENT_KEY);
 		setupListView();
 		getSteamGames();
@@ -72,15 +74,15 @@ public class ResultsFragment extends Fragment {
 		gamesListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				SteamGame gameClicked = (SteamGame) parent.getItemAtPosition(position);
+				ResultAdapterItem gameClicked = (ResultAdapterItem) parent.getItemAtPosition(position);
 				int appid = gameClicked.getAppId();
 				String name = gameClicked.getName();
 				
 				loadingPrices = Util.showProgress(getActivity(), R.string.loading_prices);
-				service.getGamePrice(appid, new NetworkRequestCallback<GameDTO>() {
+				service.getSteamGamePrice(appid, new NetworkRequestCallback<Product>() {
 					
 					@Override
-					public void onRequestResponse(GameDTO response) {
+					public void onRequestResponse(Product response) {
 						steamFinished = true;
 						if(buscapeFinished)Util.hideProgress(loadingPrices);
 						Util.showLongToast(getActivity(), "Preco: " + response.getPrice() + " Nome: " + response.getLink());
@@ -94,10 +96,10 @@ public class ResultsFragment extends Fragment {
 					}
 				});
 				
-				service.getBuscapeGameByKeyword(name, new NetworkRequestCallback<GameDTO>() {
+				service.getBuscapeGameByKeyword(name, new NetworkRequestCallback<Product>() {
 					
 					@Override
-					public void onRequestResponse(GameDTO response) {
+					public void onRequestResponse(Product response) {
 						buscapeFinished = true;
 						if(steamFinished)Util.hideProgress(loadingPrices);
 						Util.showLongToast(getActivity(), "Preco buscape: " + response.getPrice() + " Nome: " + response.getLink());
@@ -121,10 +123,10 @@ public class ResultsFragment extends Fragment {
 		Util.hideProgress(loadingGames);
 	}
 	
-	private void updateList(List<SteamGame> response){
+	private void updateList(Map<String, Integer> response){
 		games.clear();
-		for(SteamGame game : response){
-			games.add(game);
+		for(Entry<String, Integer> game : response.entrySet()){
+			games.add(new ResultAdapterItem(game.getKey(), game.getValue()));
 		}
 		gamesListView.invalidateViews();
 	}

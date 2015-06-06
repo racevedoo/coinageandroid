@@ -1,11 +1,8 @@
 package br.ufpe.cin.coinage.database.tables;
 
-import android.provider.BaseColumns;
-
 public class ProductTable implements BaseTable{
 	
 	public static final String TABLE_NAME = "PRODUCT";
-	public static final String COLUMN_ID = "ID";
 	public static final String COLUMN_STORE = "STORE";
 	public static final String COLUMN_PRICE = "PRICE";
 	public static final String COLUMN_LINK = "LINK";

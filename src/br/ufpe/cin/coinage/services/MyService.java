@@ -1,11 +1,18 @@
 package br.ufpe.cin.coinage.services;
 
+import java.util.List;
+import java.util.Map;
+
+import br.ufpe.cin.coinage.android.MainApplication;
+import br.ufpe.cin.coinage.database.DBHelper;
+import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.network.CoinageService;
+import br.ufpe.cin.coinage.network.UpdatePriceCallback;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 public class MyService extends Service{	
 
@@ -14,7 +21,7 @@ public class MyService extends Service{
 	@Override
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		doStuff();			
-		
+
 		//Para o service
 		stopSelf();			
 		//Caso o service morra, ele é reiniciado automaticamente.
@@ -33,11 +40,44 @@ public class MyService extends Service{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	private void doStuff() {
 		//Tarefa do service
-		Log.i("[Service]", "Service beatch");
+		CoinageService service = CoinageService.getInstance();
+		Map<String, Integer> steamId = MainApplication.allSteamGames;
+
+		DBHelper db = MainApplication.getDBHelper();
+		List<Game> games = db.getAllGames();
+
+		UpdatePriceCallback callback;
+
+		for (Game g : games) {
+			callback = new UpdatePriceCallback(g);
+			
+			service.getSteamGamePrice(steamId.get(g.getName()), callback);
+			service.getBuscapeGameByKeyword(g.getName(), callback);
+		}	
+		
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

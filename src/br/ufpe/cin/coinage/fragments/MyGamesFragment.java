@@ -1,18 +1,12 @@
 package br.ufpe.cin.coinage.fragments;
 
 
-import static br.ufpe.cin.coinage.utils.Util.hideProgress;
-import static br.ufpe.cin.coinage.utils.Util.showLongToast;
-import static br.ufpe.cin.coinage.utils.Util.showProgress;
 import static br.ufpe.cin.coinage.utils.Constants.*;
-import static org.apache.commons.lang3.StringUtils.containsIgnoreCase;
-
 import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
 import android.app.Fragment;
-import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.os.Bundle;
@@ -33,18 +27,12 @@ import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
-import br.ufpe.cin.coinage.model.SteamGame;
 import br.ufpe.cin.coinage.network.CoinageService;
-import br.ufpe.cin.coinage.network.NetworkRequestCallback;
-import br.ufpe.cin.coinage.utils.Util;
 
 public class MyGamesFragment extends Fragment {
 
-	private static final String TAG = "ListGamesFragment";
-	
 	private CoinageService service;
 	private ListView gamesListView;
-	private ProgressDialog loadingGames;
 	private List<Game> games;
 	/**
 	 * Returns a new instance of this fragment for the given section number.
@@ -109,7 +97,7 @@ public class MyGamesFragment extends Fragment {
 			searchView.setOnQueryTextListener(new OnQueryTextListener() {
 				@Override
 				public boolean onQueryTextSubmit(final String query) {
-					navigateToViewFragment(query);
+					navigateToResultsFragment(query);
 					return true;
 				}
 				
@@ -138,7 +126,7 @@ public class MyGamesFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	private void navigateToViewFragment(String keyword) {
+	private void navigateToResultsFragment(String keyword) {
 		final Fragment fragment = ResultsFragment.newInstance();
 		
 		final Bundle args = new Bundle();

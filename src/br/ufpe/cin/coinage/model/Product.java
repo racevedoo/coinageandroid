@@ -1,6 +1,6 @@
 package br.ufpe.cin.coinage.model;
 
-public class Product {
+public class Product implements Comparable{
 	
 	Store store;
 	double price;
@@ -36,6 +36,22 @@ public class Product {
 	
 	public void setLink(String link) {
 		this.link = link;
+	}
+
+	@Override
+	public int compareTo(Object another) {
+		Product other = (Product) another;
+		if (this.price < other.price) {
+			return -1;
+		}
+		else if (this.price > other.price) {
+			return 1;
+		}
+		else if (this.store.ordinal() < other.store.ordinal()) {
+			return -1;
+		}
+		
+		return 0;
 	}
 
 }

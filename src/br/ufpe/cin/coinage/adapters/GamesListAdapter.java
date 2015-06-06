@@ -1,6 +1,5 @@
 package br.ufpe.cin.coinage.adapters;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;

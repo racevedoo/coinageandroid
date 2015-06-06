@@ -19,9 +19,11 @@ public class DBHelper extends SQLiteOpenHelper{
 	
 	private SQLiteDatabase db;
 	
-	private static final String[] DATABASE_CREATE = { GameTable.CREATE_TABLE, ProductTable.CREATE_TABLE, GameProductTable.CREATE_TABLE };
+	private static final String[] DATABASE_CREATE = { GameTable.CREATE_TABLE, ProductTable.CREATE_TABLE, 
+		GameProductTable.CREATE_TABLE };
 	
-	private static final String[] DATABASE_DELETE = { GameProductTable.DROP_TABLE, ProductTable.DROP_TABLE, GameTable.DROP_TABLE };
+	private static final String[] DATABASE_DELETE = { GameProductTable.DROP_TABLE, ProductTable.DROP_TABLE, 
+		GameTable.DROP_TABLE };
 	
 	public static final String DATABASE_NAME = "Coinage.db";
 	public static final int DATABASE_VERSION = 1;
@@ -177,13 +179,24 @@ public class DBHelper extends SQLiteOpenHelper{
 		return games;
 	}
 	
-	public void updateGame(Game game) {
+	public void updatePrice(Product product) {
+		String where = ProductTable.TABLE_NAME + "=" + "'" + product.getLink() + "'";
+		
+		ContentValues values = new ContentValues();
+		values.put(ProductTable.COLUMN_PRICE, product.getPrice());
+		
+		this.db = this.getWritableDatabase();
+		db.update(ProductTable.TABLE_NAME, values, where, null);
+	}	
+	
+	public void updateGameAlert(Game game) {
+		String where = GameTable.COLUMN_NAME + "=" + "'" + game.getName() + "'";
 		
 		ContentValues values = new ContentValues();
         values.put(GameTable.COLUMN_ALERTA, game.isAlert());
         
         this.db = this.getWritableDatabase();
-        db.update(GameTable.TABLE_NAME, values, GameTable.COLUMN_NAME + "=" + "'" + game.getName() + "'", null);
+        db.update(GameTable.TABLE_NAME, values, where, null);
 	}
 	
 	
