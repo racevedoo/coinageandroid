@@ -6,16 +6,13 @@ import java.util.Map;
 import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
-import br.ufpe.cin.coinage.model.Product;
 import br.ufpe.cin.coinage.network.CoinageService;
 import br.ufpe.cin.coinage.network.UpdatePriceCallback;
-import br.ufpe.cin.coinage.network.NetworkRequestCallback;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
-import android.util.Log;
 
 public class MyService extends Service{	
 

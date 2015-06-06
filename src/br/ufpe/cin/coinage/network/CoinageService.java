@@ -31,6 +31,7 @@ public class CoinageService {
 		return mInstance;
 	}
 	
+
 	public void getBuscapeGameByKeyword(String keyword, final NetworkRequestCallback<Product> callback) {
 		keyword = keyword.replaceAll(" ","-");
 		try {
