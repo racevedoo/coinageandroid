@@ -1,32 +1,26 @@
 package br.ufpe.cin.coinage.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 public class Game {
 	
 	private String name;
 	private List<Product> products;
-	private boolean alert;
 	
 	public Game(String name) {
 		this.name = name;
-		this.alert = false;
 		this.products = new ArrayList<Product>();
 	}
 	
 	public Game(String name, boolean alert) {
 		this.name = name;
-		this.alert = alert;
 		this.products = new ArrayList<Product>();
 	}	
 		
 	public Game(String name, List<Product> products, boolean alert) {
 		this.name = name;
 		this.products = products;
-		this.alert = alert;
 	}
 	
 	public String getName() {
@@ -35,14 +29,6 @@ public class Game {
 	
 	public void setName(String name) {
 		this.name = name;
-	}
-	
-	public boolean isAlert() {
-		return alert;
-	}
-	
-	public void setAlert(boolean alert) {
-		this.alert = alert;
 	}
 	
 	public Product getCheaperProduct() {
@@ -84,12 +70,9 @@ public class Game {
 		s = s + "Nome: " +this.name+"\n";
 		
 		for (Product p : this.products)
-			s = s + "Loja: " + p.getStore() + ", Preço: " +p.getPrice()+ ", Link: " +p.getLink() +"\n";
-		
-		s = s + "Alerta: " +this.alert + "\n";		
+			s = s + "Loja: " + p.getStore() + ", Preço: " +p.getPrice()+ ", Link: " +p.getLink() +"\n";		
 		
 		return s;
-	}
-	
+	}	
 	
 }

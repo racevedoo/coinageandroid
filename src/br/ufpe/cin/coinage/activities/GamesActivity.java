@@ -49,7 +49,8 @@ public class GamesActivity extends Activity implements
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout));			
+				(DrawerLayout) findViewById(R.id.drawer_layout));		
+		
 	}
 
 	

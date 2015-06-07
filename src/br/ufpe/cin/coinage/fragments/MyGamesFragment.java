@@ -54,7 +54,6 @@ public class MyGamesFragment extends Fragment {
 		gamesListView = (ListView) rootView.findViewById(R.id.steam_games_lstv);
 		games = new ArrayList<Game>();
 		setupListView();
-		doMyGames();
 		setHasOptionsMenu(true);
 		return rootView;
 	}
@@ -73,9 +72,7 @@ public class MyGamesFragment extends Fragment {
 		gamesListView.setAdapter(new GamesListAdapter(getActivity(), games));
 	}
 	
-	private void doMyGames(){
-		updateList(getDbHelper().getGamesAlert());
-	}
+	
 	
 	private void updateList(List<Game> response){
 		games.clear();
