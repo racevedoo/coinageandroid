@@ -29,7 +29,7 @@
             </intent-filter>
             
         </activity>
-        <service android:name=".MyService"> </service>
+        <service android:enabled="true" android:name="br.ufpe.cin.coinage.services.MyService"> </service>
     </application>
 
 </manifest>

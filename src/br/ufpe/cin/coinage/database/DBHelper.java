@@ -180,10 +180,10 @@ public class DBHelper extends SQLiteOpenHelper{
 	}
 	
 	public void updatePrice(Product product) {
-		String where = ProductTable.TABLE_NAME + "=" + "'" + product.getLink() + "'";
+		String where = ProductTable.COLUMN_LINK + "=" + "'" + product.getLink() + "'";
 		
 		ContentValues values = new ContentValues();
-		values.put(ProductTable.COLUMN_PRICE, product.getPrice());
+		values.put(ProductTable.COLUMN_PRICE, product.getPrice() * 100);
 		
 		this.db = this.getWritableDatabase();
 		db.update(ProductTable.TABLE_NAME, values, where, null);

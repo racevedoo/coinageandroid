@@ -7,6 +7,7 @@ import static org.apache.commons.httpclient.util.URIUtil.encodeQuery;
 import org.apache.commons.httpclient.URIException;
 import org.json.JSONObject;
 
+import android.util.Log;
 import br.ufpe.cin.coinage.model.Product;
 import br.ufpe.cin.coinage.utils.Util;
 
@@ -87,18 +88,21 @@ public class CoinageService {
 	
 	public void getSteamGamePrice(final int appId, 
 			final NetworkRequestCallback<Product> callback){
-		String url = String.format(CALLABLE_URL_APP_DETAILS_STEAM, appId);
+		String url = String.format(CALLABLE_URL_APP_DETAILS_STEAM, appId);	
+		
 		MyRequest.Builder builder = new MyRequest.Builder();
         builder.setTag(TAG)
         	.setUrl(url)
-        	.setMethod(Request.Method.GET);
+        	.setMethod(Request.Method.GET);        
+        
         mNetworkQueue.doRequest(builder.build(), new NetworkRequestCallback<JSONObject>() {
 			
 			public void onRequestResponse(JSONObject response) {
 				try {
 					callback.onRequestResponse(Util.parseSteamGame(appId,response));
 				} catch (Exception e) {
-					onRequestError(e);
+					Log.i("ErrorGetSteamGamePrice", e.getMessage());
+					onRequestError(e);					
 				}
 			}
 			

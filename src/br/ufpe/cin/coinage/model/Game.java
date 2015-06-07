@@ -1,6 +1,7 @@
 package br.ufpe.cin.coinage.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -44,8 +45,17 @@ public class Game {
 		this.alert = alert;
 	}
 	
+	public Product getCheaperProduct() {
+		Product cheaper = this.products.get(0);
+		
+		for (Product p : this.products)
+			if (p.compareTo(cheaper) < 0)
+				cheaper = p;
+		
+		return cheaper;				
+	}
+	
 	public List<Product> getProducts() {	
-		Collections.sort(this.products);
 		return this.products;
 	}
 	
