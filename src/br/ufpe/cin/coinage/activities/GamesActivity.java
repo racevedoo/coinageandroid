@@ -49,18 +49,7 @@ public class GamesActivity extends Activity implements
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout));
-		
-		DBHelper db = MainApplication.getDBHelper();
-		Game game1 = new Game("Hektor");
-		game1.addProduct(new Product(Store.STEAM, 500, "http://www.joindota.com"));
-		game1.addProduct(new Product(Store.BUSCAPE, 700, "http://www.buscape.com.br"));
-		
-		db.insertGame(game1);	
-		Log.i("[Game]", game1.getName());
-		
-		Intent i = new Intent(this, MyService.class);
-		startService(i);		
+				(DrawerLayout) findViewById(R.id.drawer_layout));			
 	}
 
 	
