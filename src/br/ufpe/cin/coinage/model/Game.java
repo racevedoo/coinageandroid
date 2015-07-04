@@ -13,12 +13,9 @@ public class Game {
 		this.products = new ArrayList<Product>();
 	}
 	
-	public Game(String name, boolean alert) {
-		this.name = name;
-		this.products = new ArrayList<Product>();
-	}	
+	
 		
-	public Game(String name, List<Product> products, boolean alert) {
+	public Game(String name, List<Product> products) {
 		this.name = name;
 		this.products = products;
 	}

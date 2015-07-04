@@ -2,17 +2,20 @@ package br.ufpe.cin.coinage.fragments;
 
 
 import static br.ufpe.cin.coinage.utils.Constants.KEYWORD_FRAGMENT_KEY;
+import static br.ufpe.cin.coinage.utils.Constants.NAME_FRAGMENT_KEY;
+import static br.ufpe.cin.coinage.utils.Constants.PRODUCTS_FRAGMENT_KEY;
 
 import java.util.ArrayList;
-import java.util.Hashtable;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.Vector;
 
 import android.app.Activity;
 import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,10 +24,9 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import br.ufpe.cin.coinage.adapters.ResultsAdapter;
-import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
-import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Product;
+import br.ufpe.cin.coinage.model.Store;
 import br.ufpe.cin.coinage.model.ui.ResultAdapterItem;
 import br.ufpe.cin.coinage.network.CoinageService;
 import br.ufpe.cin.coinage.network.NetworkRequestCallback;
@@ -32,15 +34,14 @@ import br.ufpe.cin.coinage.utils.Util;
 
 public class ResultsFragment extends Fragment {
 
-	private static final String TAG = "ListGamesFragment";
-	
+	private static final int NUMBER_OF_STORES = Store.values().length - 1;
 	private CoinageService service;
 	private ListView gamesListView;
 	private ProgressDialog loadingGames;
 	private ProgressDialog loadingPrices;
 	private List<ResultAdapterItem> games;
 	private String keyword;
-	private boolean steamFinished = false, buscapeFinished = false;
+	private List<Product> resultGames;
 	/**
 	 * Returns a new instance of this fragment for the given section number.
 	 */
@@ -60,14 +61,11 @@ public class ResultsFragment extends Fragment {
 		service = CoinageService.getInstance();
 		gamesListView = (ListView) rootView.findViewById(R.id.steam_games_lstv);
 		games = new ArrayList<ResultAdapterItem>();
+		resultGames = new ArrayList<Product>();
 		keyword = getArguments().getString(KEYWORD_FRAGMENT_KEY);
 		setupListView();
 		getSteamGames();
 		return rootView;
-	}
-	
-	private DBHelper getDbHelper(){
-		return MainApplication.getDBHelper();
 	}
 	
 	private void setupListView(){
@@ -76,22 +74,23 @@ public class ResultsFragment extends Fragment {
 					int position, long id) {
 				ResultAdapterItem gameClicked = (ResultAdapterItem) parent.getItemAtPosition(position);
 				int appid = gameClicked.getAppId();
-				String name = gameClicked.getName();
+				final String name = gameClicked.getName();
 				
 				loadingPrices = Util.showProgress(getActivity(), R.string.loading_prices);
 				service.getSteamGamePrice(appid, new NetworkRequestCallback<Product>() {
 					
 					@Override
 					public void onRequestResponse(Product response) {
-						steamFinished = true;
-						if(buscapeFinished)Util.hideProgress(loadingPrices);
+						resultGames.add(response.getStore().ordinal() - 1, response);
+						if(resultGames.size() == NUMBER_OF_STORES){
+							Util.hideProgress(loadingPrices);
+							navigateToComparePriceFragment(name);
+						}
 						Util.showLongToast(getActivity(), "Preco: " + response.getPrice() + " Nome: " + response.getLink());
 					}
 					
 					@Override
 					public void onRequestError(Exception error) {
-						steamFinished = true;
-						if(buscapeFinished)Util.hideProgress(loadingPrices);
 						Util.showLongToast(getActivity(), "Error retrieving game price");
 					}
 				});
@@ -100,18 +99,20 @@ public class ResultsFragment extends Fragment {
 					
 					@Override
 					public void onRequestResponse(Product response) {
-						buscapeFinished = true;
-						if(steamFinished)Util.hideProgress(loadingPrices);
+						resultGames.add(response.getStore().ordinal()-1, response);
 						Util.showLongToast(getActivity(), "Preco buscape: " + response.getPrice() + " Nome: " + response.getLink());
+						if(resultGames.size() == NUMBER_OF_STORES){
+							Util.hideProgress(loadingPrices);
+							navigateToComparePriceFragment(name);
+						}
 					}
 					
 					@Override
 					public void onRequestError(Exception error) {
-						buscapeFinished = true;
-						if(steamFinished)Util.hideProgress(loadingPrices);
+						Util.hideProgress(loadingPrices);
 						Util.showLongToast(getActivity(), "Error retrieving game price");
 					}
-				});
+				});				
 			}
 		});
 		gamesListView.setAdapter(new ResultsAdapter(getActivity(), games));
@@ -136,11 +137,12 @@ public class ResultsFragment extends Fragment {
 		return super.onOptionsItemSelected(item);
 	}
 	
-	/*private void navigateToViewFragment(String keyword) {
-		final Fragment fragment = ViewFragment.newInstance();
+	private void navigateToComparePriceFragment(String name) {
+		final Fragment fragment = ComparePriceFragment.newInstance();
 		
 		final Bundle args = new Bundle();
-		args.putString(KEYWORD_FRAGMENT_KEY, keyword);
+		args.putString(NAME_FRAGMENT_KEY, name);
+		args.putParcelableArrayList(PRODUCTS_FRAGMENT_KEY, (ArrayList<? extends Parcelable>) resultGames);
 		
 		fragment.setArguments(args);
 				
@@ -149,6 +151,6 @@ public class ResultsFragment extends Fragment {
 			.replace(R.id.container, fragment)
 			.addToBackStack(null)
 			.commit();
-	}*/
+	}
 	
 }

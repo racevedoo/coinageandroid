@@ -171,13 +171,14 @@ public class Util {
 		String link = "";
 		try{
 			link = ((JSONObject)product.getJSONArray("links").get(0)).getString("url");
+			if(!link.startsWith("http://www.buscape.com.br")){
+				throw new Exception();
+			}
 		}catch(JSONException e){
 			//nao tem url
+		}catch(Exception e){
+			//nao tem url
 		}
-		if(!link.startsWith("http://www.buscape.com.br")){
-			throw new Exception();
-		}
-		
 		return new Product(Store.BUSCAPE, price, link);
 	}
 	

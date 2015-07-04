@@ -1,6 +1,9 @@
 package br.ufpe.cin.coinage.model;
 
-public class Product implements Comparable{
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Product implements Comparable, Parcelable{
 	
 	Store store;
 	double price;
@@ -13,11 +16,17 @@ public class Product implements Comparable{
 	}
 	
 	public Product(int store, double price, String link) {
-		this.store = Store.values()[store];
+		this.store = Store.fromInt(store);
 		this.price = price;
 		this.link = link;
 	}	
 	
+	public Product(Parcel source) {
+		this.store = Store.fromInt(source.readInt());
+		this.price = source.readDouble();
+		this.link = source.readString();
+	}
+
 	public Store getStore() {
 		return store;
 	}
@@ -54,4 +63,29 @@ public class Product implements Comparable{
 		return 0;
 	}
 
+	@Override
+	public int describeContents() {
+		return 0;
+	}
+
+	@Override
+	public void writeToParcel(Parcel dest, int flags) {
+		dest.writeInt(this.store.ordinal());
+		dest.writeDouble(this.price);
+		dest.writeString(this.link);	
+	}
+	
+	public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+		 
+        @Override
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+ 
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
+	
 }

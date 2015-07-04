@@ -63,29 +63,6 @@ public class CoinageService {
         
 	}
 	
-	/*public void getAllSteamGames(final NetworkRequestCallback<List<SteamGame>> callback){
-		String url = URL_ALL_GAMES_STEAM;
-		MyRequest.Builder builder = new MyRequest.Builder();
-        builder.setTag(TAG)
-        	.setUrl(url)
-        	.setMethod(Request.Method.GET);
-        mNetworkQueue.doRequest(builder.build(), new NetworkRequestCallback<JSONObject>() {
-			
-			public void onRequestResponse(JSONObject response) {
-				try {
-					callback.onRequestResponse(Util.parseSteamGames(response));
-				} catch (Exception e) {
-					onRequestError(e);
-				}
-			}
-			
-			public void onRequestError(Exception error) {
-				callback.onRequestError(error);
-				
-			}
-		});
-	}*/
-	
 	public void getSteamGamePrice(final int appId, 
 			final NetworkRequestCallback<Product> callback){
 		String url = String.format(CALLABLE_URL_APP_DETAILS_STEAM, appId);	
@@ -113,49 +90,6 @@ public class CoinageService {
 		});
 	}
 	
-	/* SESSION SERVICE */
-	/**
-	 * Calls the connect function from OKAPI
-	 * @param domain
-	 * @param user
-	 * @param password
-	 * @param callback
-	 */
-//	public void connect(String domain, String user, String password,
-//			final NetworkRequestCallback<Void> callback) {
-//        String url = URL_API_V1_OK_MOBILE +
-//        		SESSION_ROUTE_OK_MOBILE + 
-//        		CONNECT_REQUEST_SESSION_OK_MOBILE;
-//        
-//        Map<String, String> formData = new HashMap<String, String>();
-//        String encode = encodeCredentials(domain, user, password);
-//        formData.put(CREDENTIAL_FORM_PARAM_OK_MOBILE, encode);
-//        
-//        MyRequest.Builder builder = new MyRequest.Builder();
-//        builder.setTag(TAG)
-//        	.setUrl(url)
-//        	.setMethod(Request.Method.POST)
-//        	.setFormDataParams(formData);
-//        
-//        mNetworkQueue.doRequest(builder.build(),
-//        		new NetworkRequestCallback<JSONObject>() {
-//					
-//					@Override
-//					public void onRequestResponse(JSONObject response) {
-//						try {
-//							sessionId = response.getString(SESSION_ID_HEADER_PARAM_OK_MOBILE);
-//							callback.onRequestResponse(null);
-//						} catch (JSONException e) {
-//							onRequestError(e);
-//						}
-//					}
-//					
-//					@Override
-//					public void onRequestError(Exception error) {
-//						callback.onRequestError(error);
-//					}
-//				});
-//	}
 
 	
 }

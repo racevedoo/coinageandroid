@@ -156,11 +156,10 @@ public class DBHelper extends SQLiteOpenHelper{
 		Cursor c = this.db.query(true, GameTable.TABLE_NAME, GameTable.ALL_COLUMNS, null, null, null, null, null, null);
 		if (c != null) c.moveToFirst();
 		String name = "";
-		boolean alert = false;
 		Game toAdd = null;
 		while(!c.isAfterLast()) {
 			name = c.getString(c.getColumnIndexOrThrow(GameTable.COLUMN_NAME));
-			toAdd = new Game(name, getProducts(name), alert);
+			toAdd = new Game(name, getProducts(name));
 			games.add(toAdd);
 			c.moveToNext();
 		}
@@ -264,7 +263,9 @@ public class DBHelper extends SQLiteOpenHelper{
 		return this.db.insertWithOnConflict(GameTable.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 	}
 
-
+	public boolean hasGame(String name){
+		return getGameId(name) != -1;
+	}
 
 
 }

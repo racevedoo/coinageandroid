@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="8dp">
+
+    <TextView
+        android:id="@+id/name_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge" />
+    <!--  
+	<TextView
+        android:id="@+id/description_tv"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:text="Lorem ipsum dolor sit amet, vix ad iudico liberavisse. Graecis appareat eu usu, eros explicari contentiones et mei, ut adolescens ullamcorper usu. Sit corrumpit necessitatibus no, quis audiam qui an. Pro te cetero nonumes."
+        android:textAppearance="?android:attr/textAppearanceMedium" />
+        -->
+    <LinearLayout
+       android:id="@+id/store_names_layout"
+	   android:orientation="horizontal"
+	   android:layout_width="match_parent"
+	   android:layout_height="wrap_content"
+	   android:layout_below="@+id/name_tv"
+	   android:layout_marginTop="30dp">
+    
+	     <TextView
+	      android:id="@+id/steam_tv"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:layout_weight="1"
+	      android:textAppearance="?android:attr/textAppearanceMedium" />
+	     
+	     <TextView
+	      android:id="@+id/buscape_tv"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:layout_weight="1"
+	      android:textAppearance="?android:attr/textAppearanceMedium" />
+    </LinearLayout>
+
+    <LinearLayout
+       android:id="@+id/store_prices_layout"
+	   android:orientation="horizontal"
+	   android:layout_width="match_parent"
+	   android:layout_height="wrap_content"
+	   android:layout_below="@+id/store_names_layout">
+    
+	     <TextView
+	      android:id="@+id/steam_price_tv"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:layout_weight="1"
+	      android:textAppearance="?android:attr/textAppearanceMedium" />
+	     
+	     <TextView
+	      android:id="@+id/buscape_price_tv"
+	      android:layout_width="match_parent"
+	      android:layout_height="wrap_content"
+	      android:layout_weight="1"
+	      android:textAppearance="?android:attr/textAppearanceMedium" />
+	</LinearLayout>
+	
+    <Button 
+        android:id="@+id/add_alert_btn" 
+        android:layout_width="wrap_content" 
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_below="@+id/store_prices_layout"/>
+        
+</RelativeLayout>
