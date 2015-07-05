@@ -6,6 +6,7 @@ import android.app.Fragment;
 import android.app.FragmentManager;
 import android.content.Intent;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.DrawerLayout;
 import android.util.Log;
 import android.view.Menu;
@@ -38,10 +39,9 @@ public class GamesActivity extends Activity implements
 	private FragmentsCatalog fragmentsCatalog;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
+		super.onCreate(savedInstanceState);	
 		fragmentsCatalog = new FragmentsCatalog(Constants.OPTIONS_TITLES, Constants.FRAGMENTS);
-		setContentView(R.layout.activity_games);
-		
+		setContentView(R.layout.activity_games);		
 
 		mNavigationDrawerFragment = (NavigationDrawerFragment) getFragmentManager()
 				.findFragmentById(R.id.navigation_drawer);
@@ -49,10 +49,11 @@ public class GamesActivity extends Activity implements
 
 		// Set up the drawer.
 		mNavigationDrawerFragment.setUp(R.id.navigation_drawer,
-				(DrawerLayout) findViewById(R.id.drawer_layout));		
+				(DrawerLayout) findViewById(R.id.drawer_layout));	
+		
+		startService(new Intent(this, MyService.class));
 		
 	}
-
 	
 	@Override
 	public void onNavigationDrawerItemSelected(int position) {
@@ -67,9 +68,7 @@ public class GamesActivity extends Activity implements
 			fragmentManager.beginTransaction()
 					.replace(R.id.container, replaceFragment, fragmentsCatalog.getFragmentConstants()[position]).commit();
 		}
-	}
-	
-	
+	}		
 	
 	public void onSectionAttached(int number) {
 		mTitle = getString(fragmentsCatalog.getTitles()[number]);

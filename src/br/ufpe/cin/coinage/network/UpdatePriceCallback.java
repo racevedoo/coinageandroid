@@ -6,7 +6,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;

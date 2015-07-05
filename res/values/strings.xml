@@ -15,4 +15,9 @@
     <string name="navigation_drawer_close">Close navigation drawer</string>
     <string name="action_example">Example action</string>
 	<string name="search_hint">Game</string>
+	<string name="alterar">Alterar</string>
+	<string name="cancelar">Cancelar</string>
+	<string name="updateTimeTitle">Mudar o tempo de atualização</string>
+	<string name="title_preferences">Preferências</string>
+	<string name="timePreference_key">timePreference</string>
 </resources>

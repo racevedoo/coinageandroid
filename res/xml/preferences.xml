@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+   	<br.ufpe.cin.coinage.preferences.SearchResultPreference
+   	    android:key="searchResultPreference"
+   	    android:title="Número de resultados da pesquisa"/>
+   	
+   	<br.ufpe.cin.coinage.preferences.TimePreference
+   	    android:key="timePreference"
+   	    android:title="Intervalo para atualização de preços"/> 
+   
+
+</PreferenceScreen>
