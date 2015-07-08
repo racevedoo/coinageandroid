@@ -41,6 +41,7 @@ public class CoinageService {
 			//nothing
 		}
 		String url = String.format(CALLABLE_URL_API_BUSCAPE, keyword);
+		Log.i("[url]",url);
 		MyRequest.Builder builder = new MyRequest.Builder();
         builder.setTag(TAG)
         	.setUrl(url)

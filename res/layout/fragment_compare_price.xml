@@ -32,14 +32,16 @@
 	      android:layout_width="match_parent"
 	      android:layout_height="wrap_content"
 	      android:layout_weight="1"
-	      android:textAppearance="?android:attr/textAppearanceMedium" />
+	      android:textAppearance="?android:attr/textAppearanceMedium" 
+	      android:text="Steam"/>
 	     
 	     <TextView
 	      android:id="@+id/buscape_tv"
 	      android:layout_width="match_parent"
 	      android:layout_height="wrap_content"
 	      android:layout_weight="1"
-	      android:textAppearance="?android:attr/textAppearanceMedium" />
+	      android:textAppearance="?android:attr/textAppearanceMedium"
+	      android:text="Buscapé" />
     </LinearLayout>
 
     <LinearLayout

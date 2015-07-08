@@ -54,38 +54,49 @@ public class DBHelper extends SQLiteOpenHelper{
 	}
 
 	public void insertOrUpdate(Game game) {
-		if (getGame(game.getName()) == null)
+		if (getGame(game.getName()) == null) {
+			Log.i("[DB]", "Inserting new game " +game.getName());
 			insertGame(game);
-		else
+		}			
+		else {
+			Log.i("[DB]", "Updating game " +game.getName());
 			updateGame(game);
+		}			
 	}	
 
 	public void insertGame(Game game) {	
 		this.db = this.getWritableDatabase();
 
-		long gameId = insertGameTable(game.getName());
-		Log.i("[DB]", String.valueOf(gameId));
+		long gameId = insertGameTable(game.getName());		
 
 		if (gameId != -1) {
+			Log.i("[DB]", "New game inserted. ID = " +String.valueOf(gameId));
 			List<Long> productId = insertProducts(game.getProducts());
 
-			for (long l : productId)
+			Log.i("[DB]", "Inserting game products.");
+			for (long l : productId) {
 				insertGameProductTable(gameId, l);
+			}				
 		}		
 	}
 
 	public void removeGame(String name) {
+		Log.i("[DB]", "Removing game " +name);
 		this.db = this.getWritableDatabase();
 		int gameId = getGameId(name);
 		List<Integer> productIds = getGameProductsId(gameId);
 		this.db.delete(GameTable.TABLE_NAME, GameTable.COLUMN_ID + "=" + "'" + gameId + "'", null);
 		this.db.delete(GameProductTable.TABLE_NAME, GameProductTable.COLUMN_GAME + "=" + "'" + gameId + "'", null);
+		Log.i("[DB]", "Game removed " +name+ " Removing products...");
 		for (Integer i : productIds) {
+			Log.i("[DB]", "Removing product " +i);
 			this.db.delete(ProductTable.TABLE_NAME, ProductTable.COLUMN_ID + "=" + "'" + i + "'", null);
+			Log.i("[DB]", "Product " +i+ " removed.");
 		}
 	}	
 
 	public Game getGame(String name) {
+		Log.i("[DB]", "Getting game " +name);
 		Game game = getGameTable(name);
 
 		if (game != null)
@@ -150,22 +161,22 @@ public class DBHelper extends SQLiteOpenHelper{
 
 	public List<Game> getAllGames() {
 		this.db = this.getReadableDatabase();
-
+		
 		List<Game> games = new ArrayList<Game>();
-
+		
 		Cursor c = this.db.query(true, GameTable.TABLE_NAME, GameTable.ALL_COLUMNS, null, null, null, null, null, null);
-		if (c != null) c.moveToFirst();
-		String name = "";
-		Game toAdd = null;
+		
+		if (c != null)
+			c.moveToFirst();
+		
 		while(!c.isAfterLast()) {
-			name = c.getString(c.getColumnIndexOrThrow(GameTable.COLUMN_NAME));
-			toAdd = new Game(name, getProducts(name));
-			games.add(toAdd);
+			games.add(getGame(c.getString(c.getColumnIndexOrThrow(GameTable.COLUMN_NAME))));
 			c.moveToNext();
 		}
-
+		
 		c.close();
-		return games;		
+		
+		return games;
 	}
 
 	public int getGameId(String name) {
@@ -231,6 +242,7 @@ public class DBHelper extends SQLiteOpenHelper{
 	}		
 
 	private List<Long> insertProducts(List<Product> products) {
+		Log.i("[DB]", "Inserting products");
 		ArrayList<Long> productId = new ArrayList<Long>();
 
 		for (Product p : products)
@@ -285,3 +297,4 @@ public class DBHelper extends SQLiteOpenHelper{
 
 
 
+ 	

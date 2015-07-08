@@ -16,6 +16,7 @@ import android.app.Fragment;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -24,6 +25,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import br.ufpe.cin.coinage.adapters.ResultsAdapter;
+import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.model.Product;
 import br.ufpe.cin.coinage.model.Store;
@@ -81,6 +83,9 @@ public class ResultsFragment extends Fragment {
 					
 					@Override
 					public void onRequestResponse(Product response) {
+						if(resultGames.size() > 0 && resultGames.get(0).getStore() == Store.STEAM){
+							resultGames.clear();
+						}
 						resultGames.add(response.getStore().ordinal() - 1, response);
 						if(resultGames.size() == NUMBER_OF_STORES){
 							Util.hideProgress(loadingPrices);
@@ -99,6 +104,9 @@ public class ResultsFragment extends Fragment {
 					
 					@Override
 					public void onRequestResponse(Product response) {
+						if(resultGames.size() > 0 && resultGames.get(0).getStore() == Store.BUSCAPE){
+							resultGames.clear();
+						}
 						resultGames.add(response.getStore().ordinal()-1, response);
 						Util.showLongToast(getActivity(), "Preco buscape: " + response.getPrice() + " Nome: " + response.getLink());
 						if(resultGames.size() == NUMBER_OF_STORES){
@@ -110,7 +118,7 @@ public class ResultsFragment extends Fragment {
 					@Override
 					public void onRequestError(Exception error) {
 						Util.hideProgress(loadingPrices);
-						Util.showLongToast(getActivity(), "Error retrieving game price");
+						Util.showLongToast(getActivity(), "Error retrieving buscape game price");
 					}
 				});				
 			}
@@ -126,8 +134,12 @@ public class ResultsFragment extends Fragment {
 	
 	private void updateList(Map<String, Integer> response){
 		games.clear();
+		int cnt=0;
+		long gamesQnt = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext()).getLong(getString(R.string.search_result_preference_key), -1);
 		for(Entry<String, Integer> game : response.entrySet()){
 			games.add(new ResultAdapterItem(game.getKey(), game.getValue()));
+			cnt++;
+			if(cnt>=gamesQnt)break;
 		}
 		gamesListView.invalidateViews();
 	}

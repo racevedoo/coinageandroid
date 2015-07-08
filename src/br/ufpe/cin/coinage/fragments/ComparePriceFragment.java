@@ -51,7 +51,7 @@ public class ComparePriceFragment extends Fragment{
 		mSteamPriceTextView = (TextView) rootView.findViewById(R.id.steam_price_tv);
 		mBuscapePriceTextView = (TextView) rootView.findViewById(R.id.buscape_price_tv);
 		mAddAlertButton = (Button) rootView.findViewById(R.id.add_alert_btn);
-		setupButton();
+		
 		Bundle args = getArguments();
 		name = args.getString(NAME_FRAGMENT_KEY);
 		resultGames = args.getParcelableArrayList(PRODUCTS_FRAGMENT_KEY);
@@ -67,6 +67,7 @@ public class ComparePriceFragment extends Fragment{
 				mBuscapePriceTextView.setText(decimalFormat.format(product.getPrice()));
 			}
 		}
+		setupButton();
 		return rootView;
 	}
 	

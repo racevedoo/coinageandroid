@@ -20,4 +20,5 @@
 	<string name="updateTimeTitle">Mudar o tempo de atualização</string>
 	<string name="title_preferences">Preferências</string>
 	<string name="timePreference_key">timePreference</string>
+	<string name="search_result_preference_key">searchResultPreference</string>
 </resources>
