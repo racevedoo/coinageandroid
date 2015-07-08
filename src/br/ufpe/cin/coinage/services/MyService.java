@@ -28,6 +28,7 @@ public class MyService extends Service{
 	public int onStartCommand(Intent intent, int flags, int startId) {
 		Log.i("[Service]", "service");
 		sharedPreferences = PreferenceManager.getDefaultSharedPreferences(MainApplication.getContext());
+		Log.i("[huehue]", sharedPreferences.getLong(getResources().getString(R.string.timePreference_key), DEFAULT_INTERVAL)+"");
 		doStuff();			
 
 		//Para o service
@@ -38,8 +39,8 @@ public class MyService extends Service{
 
 	@Override
 	public void onDestroy() {
-		//Setar o service para ser reiniciado após um minuto.
-		AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);
+		Log.i("[huehue]", sharedPreferences.getLong(getResources().getString(R.string.timePreference_key), DEFAULT_INTERVAL)+"");
+		AlarmManager alarm = (AlarmManager)getSystemService(ALARM_SERVICE);		
 		alarm.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+sharedPreferences.getLong(getResources().getString(R.string.timePreference_key), DEFAULT_INTERVAL), PendingIntent.getService(this, 0, new Intent(this, MyService.class), 0));
 	};
 

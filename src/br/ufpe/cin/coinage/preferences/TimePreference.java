@@ -3,8 +3,13 @@ package br.ufpe.cin.coinage.preferences;
 
 import java.util.concurrent.TimeUnit;
 
+import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
+import br.ufpe.cin.coinage.services.MyService;
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
@@ -13,7 +18,8 @@ import android.widget.NumberPicker;
 
 public class TimePreference extends DialogPreference{
 	
-	private static final long DEFAULT_INTERVAL = 86400000; //24h em ms
+	private static final long DEFAULT_INTERVAL2 = 86400000; //24h em ms
+	private static final long DEFAULT_INTERVAL = 30000; //30s
 	private long interval;
 	private NumberPicker picker = null;
 
@@ -48,11 +54,15 @@ public class TimePreference extends DialogPreference{
 		if(positiveResult) {
 			setInterval(picker.getValue());
 			if (picker.getValue() == 7)
-				setInterval(60000);
+				this.interval = 60000;
+			if (picker.getValue() == 8)
+				this.interval = 30000;
 			
 			setSummary(getSummary());
 			if(callChangeListener(interval)) {
 				persistLong(interval);
+				AlarmManager alarmManager = (AlarmManager) MainApplication.getContext().getSystemService(Context.ALARM_SERVICE);
+				alarmManager.set(AlarmManager.RTC_WAKEUP, System.currentTimeMillis()+this.interval, PendingIntent.getService(MainApplication.getContext(), 0, new Intent(MainApplication.getContext(), MyService.class), 0));
 				notifyChanged();
 			}			
 		}

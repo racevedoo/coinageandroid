@@ -12,6 +12,7 @@ import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
 import br.ufpe.cin.coinage.model.Product;
+import br.ufpe.cin.coinage.utils.Util;
 
 public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 	
@@ -61,6 +62,8 @@ public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 		builder.setAutoCancel(true);
 		
 		Intent intent = new Intent(Intent.ACTION_VIEW);
+		Log.i("[Link]", product.getLink());
+		Util.showShortToast(MainApplication.getContext(), product.getLink());
 		System.out.println(product.getLink());
         intent.setData(Uri.parse(product.getLink()));
 		

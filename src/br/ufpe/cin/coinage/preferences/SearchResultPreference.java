@@ -1,12 +1,16 @@
 package br.ufpe.cin.coinage.preferences;
 
+import android.app.ActivityManager;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.TypedArray;
 import android.preference.DialogPreference;
 import android.util.AttributeSet;
 import android.view.View;
 import android.widget.NumberPicker;
+import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
+import br.ufpe.cin.coinage.services.MyService;
 
 public class SearchResultPreference extends DialogPreference{
 	
@@ -48,6 +52,9 @@ public class SearchResultPreference extends DialogPreference{
 			setSummary(getSummary());
 			if(callChangeListener(this.quantity)) {
 				persistLong(this.quantity);
+				((ActivityManager) MainApplication.getContext().getSystemService("MyService.class")).killBackgroundProcesses("br.ufpe.cin.coinage.services");
+				MainApplication.getContext().startService(new Intent(MainApplication.getContext(), MyService.class));
+				
 				notifyChanged();
 			}			
 		}
