@@ -47,6 +47,8 @@ public class TimePreference extends DialogPreference{
 		
 		if(positiveResult) {
 			setInterval(picker.getValue());
+			if (picker.getValue() == 7)
+				setInterval(60000);
 			
 			setSummary(getSummary());
 			if(callChangeListener(interval)) {

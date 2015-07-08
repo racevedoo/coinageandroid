@@ -50,6 +50,7 @@ public class MyService extends Service{
 	}
 
 	private void doStuff() {		
+		Log.i("[MyService]", "Atualizando preços.");
 		CoinageService service = CoinageService.getInstance();
 		
 		Map<String, Integer> steamId = MainApplication.allSteamGames;		
@@ -60,7 +61,8 @@ public class MyService extends Service{
 		
 		UpdatePriceCallback callback = new UpdatePriceCallback(null, this);
 
-		for (Game g : games) {			
+		for (Game g : games) {		
+			Log.i("[MyService]", "Atualizando" +g.getName());
 			callback.setGame(g);
 						
 			service.getSteamGamePrice(steamId.get(g.getName()), callback);

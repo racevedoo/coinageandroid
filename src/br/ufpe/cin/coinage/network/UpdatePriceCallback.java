@@ -6,7 +6,9 @@ import android.app.Service;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import br.ufpe.cin.coinage.android.MainApplication;
+import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
 import br.ufpe.cin.coinage.model.Product;
@@ -30,7 +32,10 @@ public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 	@Override
 	public void onRequestResponse(Product response) {	
 		Product product = game.getCheaperProduct();
-		
+		Log.i("[UpdatePrice]", "Menor valor para " +this.game.getName()+ ": " +product.getPrice());
+		if (MainApplication.getContext().getResources().getString(R.string.test_mode).equals("true"))
+			response.setPrice(product.getPrice() - 1);
+			
 		if (response.getPrice() != product.getPrice()) {
 			if (response.getPrice() < product.getPrice()) {
 				notifyUser(response);
@@ -38,6 +43,7 @@ public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 			
 			product.setPrice(response.getPrice());
 			db.updatePrice(product);
+			Log.i("[UpdatePrice]", "Preço do jogo " +this.game.getName()+ " modificado. Novo valor: " +response.getPrice());
 		}
 	}
 
@@ -47,6 +53,7 @@ public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 	}
 	
 	private void notifyUser(Product product) {
+		Log.i("[Notificação]", "Notificar usuário!");
 		NotificationCompat.Builder builder = new NotificationCompat.Builder(MainApplication.getContext());
 		builder.setSmallIcon(br.ufpe.cin.coinage.android.R.drawable.ic_launcher);
 		builder.setContentTitle(game.getName() + " está mais barato! R$" + product.getPrice());
@@ -68,7 +75,8 @@ public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 		builder.setContentIntent(resultPendingIntent);
 		
 		NotificationManager mNotifyMgr = (NotificationManager) this.service.getSystemService(this.service.getApplicationContext().NOTIFICATION_SERVICE);
-		mNotifyMgr.notify(1, builder.build());		
+		mNotifyMgr.notify(1, builder.build());	
+		Log.i("[Notificação]", "Usuário notificado!");
 	}
 	
 	
