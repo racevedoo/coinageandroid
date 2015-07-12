@@ -17,6 +17,7 @@ import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -63,7 +64,7 @@ public class ResultsFragment extends Fragment {
 		service = CoinageService.getInstance();
 		gamesListView = (ListView) rootView.findViewById(R.id.steam_games_lstv);
 		games = new ArrayList<ResultAdapterItem>();
-		resultGames = new ArrayList<Product>();
+		resultGames = new ArrayList<Product>(NUMBER_OF_STORES);
 		keyword = getArguments().getString(KEYWORD_FRAGMENT_KEY);
 		setupListView();
 		getSteamGames();
@@ -119,6 +120,7 @@ public class ResultsFragment extends Fragment {
 					public void onRequestError(Exception error) {
 						Util.hideProgress(loadingPrices);
 						Util.showLongToast(getActivity(), "Error retrieving buscape game price");
+						Log.i("[buscape]",error.toString());
 					}
 				});				
 			}

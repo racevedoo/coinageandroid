@@ -65,7 +65,17 @@ public class UpdatePriceCallback implements NetworkRequestCallback<Product> {
 		Log.i("[Link]", product.getLink());
 		Util.showShortToast(MainApplication.getContext(), product.getLink());
 		System.out.println(product.getLink());
-        intent.setData(Uri.parse(product.getLink()));
+        if(!product.getLink().equals("")){
+        	intent.setData(Uri.parse(product.getLink()));
+        }else{
+        	String link = "";
+        	for(Product p : game.getProducts()){
+        		if(!p.getLink().equals("")){
+        			link = p.getLink();
+        		}
+        	}
+        	intent.setData(Uri.parse(link));
+        }
 		
 		PendingIntent resultPendingIntent =
 			    PendingIntent.getActivity(

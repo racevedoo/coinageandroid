@@ -2,6 +2,7 @@ package br.ufpe.cin.coinage.fragments;
 
 
 import static br.ufpe.cin.coinage.utils.Constants.*;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,7 +10,10 @@ import android.app.Activity;
 import android.app.Fragment;
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,7 +31,9 @@ import br.ufpe.cin.coinage.android.MainApplication;
 import br.ufpe.cin.coinage.android.R;
 import br.ufpe.cin.coinage.database.DBHelper;
 import br.ufpe.cin.coinage.model.Game;
+import br.ufpe.cin.coinage.model.Product;
 import br.ufpe.cin.coinage.network.CoinageService;
+import br.ufpe.cin.coinage.utils.Util;
 
 public class MyGamesFragment extends Fragment {
 
@@ -67,7 +73,25 @@ public class MyGamesFragment extends Fragment {
 		gamesListView.setOnItemClickListener(new OnItemClickListener() {
 			public void onItemClick(AdapterView<?> parent, View view,
 					int position, long id) {
-				//nada
+				Game game = (Game)gamesListView.getItemAtPosition(position);
+				Product product = game.getCheaperProduct();
+				Intent intent = new Intent(Intent.ACTION_VIEW);
+				Log.i("[Link]", product.getLink());
+				Util.showShortToast(MainApplication.getContext(), product.getLink());
+				System.out.println(product.getLink());
+		        if(!product.getLink().equals("")){
+		        	intent.setData(Uri.parse(product.getLink()));
+		        }else{
+		        	String link = "";
+		        	for(Product p : game.getProducts()){
+		        		if(!p.getLink().equals("")){
+		        			link = p.getLink();
+		        		}
+		        	}
+		        	intent.setData(Uri.parse(link));
+		        }
+		        startActivity(intent);
+				
 			}
 		});
 		gamesListView.setAdapter(new GamesListAdapter(getActivity(), games));
