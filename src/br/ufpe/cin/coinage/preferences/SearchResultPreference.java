@@ -52,8 +52,6 @@ public class SearchResultPreference extends DialogPreference{
 			setSummary(getSummary());
 			if(callChangeListener(this.quantity)) {
 				persistLong(this.quantity);
-				((ActivityManager) MainApplication.getContext().getSystemService("MyService.class")).killBackgroundProcesses("br.ufpe.cin.coinage.services");
-				MainApplication.getContext().startService(new Intent(MainApplication.getContext(), MyService.class));
 				
 				notifyChanged();
 			}			
