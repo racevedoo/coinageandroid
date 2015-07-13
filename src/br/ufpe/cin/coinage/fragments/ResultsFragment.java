@@ -119,6 +119,7 @@ public class ResultsFragment extends Fragment {
 					@Override
 					public void onRequestError(Exception error) {
 						Util.hideProgress(loadingPrices);
+						Util.showLongToast(getActivity(), "Game not available on buscape");
 						Log.i("[request]", "Error retrieving buscape game price");
 						Log.i("[buscape]",error.toString());
 					}
