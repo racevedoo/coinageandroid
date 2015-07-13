@@ -92,12 +92,12 @@ public class ResultsFragment extends Fragment {
 							Util.hideProgress(loadingPrices);
 							navigateToComparePriceFragment(name);
 						}
-						Util.showLongToast(getActivity(), "Preco: " + response.getPrice() + " Nome: " + response.getLink());
+						Log.i("[request]", "Preco: " + response.getPrice() + " Nome: " + response.getLink());
 					}
 					
 					@Override
 					public void onRequestError(Exception error) {
-						Util.showLongToast(getActivity(), "Error retrieving game price");
+						Log.i("[request]", "Error retrieving game price");
 					}
 				});
 				
@@ -109,7 +109,7 @@ public class ResultsFragment extends Fragment {
 							resultGames.clear();
 						}
 						resultGames.add(response.getStore().ordinal()-1, response);
-						Util.showLongToast(getActivity(), "Preco buscape: " + response.getPrice() + " Nome: " + response.getLink());
+						Log.i("[request]", "Preco buscape: " + response.getPrice() + " Nome: " + response.getLink());
 						if(resultGames.size() == NUMBER_OF_STORES){
 							Util.hideProgress(loadingPrices);
 							navigateToComparePriceFragment(name);
@@ -119,7 +119,7 @@ public class ResultsFragment extends Fragment {
 					@Override
 					public void onRequestError(Exception error) {
 						Util.hideProgress(loadingPrices);
-						Util.showLongToast(getActivity(), "Error retrieving buscape game price");
+						Log.i("[request]", "Error retrieving buscape game price");
 						Log.i("[buscape]",error.toString());
 					}
 				});				
